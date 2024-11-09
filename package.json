@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "anchor": "^1.4.1",
+    "anchor-cli": "^2.0.8",
+    "solana": "^2.7.0"
+  }
+}
