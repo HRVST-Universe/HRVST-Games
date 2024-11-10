@@ -1,1 +1,1 @@
-# NFT-Anchor-Contract
+# WASM Fun
