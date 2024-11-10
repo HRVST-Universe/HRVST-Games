@@ -8,6 +8,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 HRVST-Games/
+hrvst-games
 hrvst-games.pub
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
