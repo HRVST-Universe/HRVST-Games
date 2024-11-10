@@ -1,4 +1,3 @@
-```dart
 import 'package:flutter/material.dart';
 import 'dart:js' as js;
 
