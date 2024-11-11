@@ -1,8 +1,8 @@
 [package]
 name = "pumpkin_smash_game"
 version = "0.1.0"
-authors = ["HRVST Oracle <hrvstoracle@proton.me>]
-edition = "2024"
+authors = ["HRVST Oracle <hrvstoracle@proton.me>"]
+edition = "2018"
 
 [lib]
 crate-type = ["cdylib"]
