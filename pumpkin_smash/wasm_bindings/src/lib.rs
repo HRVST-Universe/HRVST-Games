@@ -1,11 +1,8 @@
-#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
-use crate::PumpkinSmashGame;
 
-#[wasm_bindgen]
-pub fn init_game() -> PumpkinSmashGame {
-    console_log!("Initializing game");
-    let mut game = PumpkinSmashGame::new();
-    game.spawn_bubbles(); // Spawn the initial bubbles
-    game
+#[wasm_bindgen(start)]
+pub fn main_js() -> Result<(), JsValue> {
+    // Use `web_sys`'s console log function to output to the browser's console
+    web_sys::console::log_1(&"WASM module loaded successfully".into());
+    Ok(())
 }
