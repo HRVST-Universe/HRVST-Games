@@ -17,4 +17,3 @@ class PumpkinSmashApp extends StatelessWidget {
     );
   }
 }
-```
