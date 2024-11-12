@@ -15,8 +15,12 @@ class _PumpkinSmashScreenState extends State<PumpkinSmashScreen> {
     super.initState();
     try {
       // Initialize the game from Rust/WASM
-      js.context.callMethod('initGame');
-      print("Game initialized");
+      if (js.context.hasProperty('initGame')) {
+        js.context.callMethod('initGame');
+        print("Game initialized");
+      } else {
+        print("initGame is not defined in the JavaScript context");
+      }
     } catch (e) {
       print("Error initializing game: $e");
     }
@@ -39,15 +43,19 @@ class _PumpkinSmashScreenState extends State<PumpkinSmashScreen> {
     try {
       // Call the WASM function to process the tap
       print("Calling onTap in WASM");
-      String updatedBubbles = js.context.callMethod('onTap', [x, y]);
-      print("Updated bubbles: $updatedBubbles");
-      
-      // Update the harvest coin balance
-      setState(() {
-        print("Updating harvest coins");
-        harvestCoins = js.context.callMethod('getHarvestCoins');
-        print("Harvest coins updated: $harvestCoins");
-      });
+      if (js.context.hasProperty('onTap')) {
+        String updatedBubbles = js.context.callMethod('onTap', [x, y]);
+        print("Updated bubbles: $updatedBubbles");
+        
+        // Update the harvest coin balance
+        setState(() {
+          print("Updating harvest coins");
+          harvestCoins = js.context.callMethod('getHarvestCoins');
+          print("Harvest coins updated: $harvestCoins");
+        });
+      } else {
+        print("onTap is not defined in the JavaScript context");
+      }
     } catch (e) {
       print("Error handling tap: $e");
     }
