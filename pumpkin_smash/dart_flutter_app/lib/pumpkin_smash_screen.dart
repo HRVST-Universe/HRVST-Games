@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:js' as js;
 
 class PumpkinSmashScreen extends StatefulWidget {
@@ -13,7 +14,8 @@ class _PumpkinSmashScreenState extends State<PumpkinSmashScreen> {
   void initState() {
     super.initState();
     try {
-      js.context.callMethod('initGame'); // Initialize the game from Rust/WASM
+      // Initialize the game from Rust/WASM
+      js.context.callMethod('initGame');
       print("Game initialized");
     } catch (e) {
       print("Error initializing game: $e");
@@ -22,18 +24,28 @@ class _PumpkinSmashScreenState extends State<PumpkinSmashScreen> {
 
   // Handles tap events on the screen
   void _onTap(TapDownDetails details) {
-    if (!js.context.hasProperty('onTap')) { // Verify if the game instance is correctly initialized
+    print("_onTap called");
+    // Verify if the game instance is correctly initialized
+    if (!js.context.hasProperty('onTap')) {
       print("Game is not initialized");
       return;
     }
-    final double x = details.localPosition.dx; // Get the x-coordinate of the tap
-    final double y = details.localPosition.dy; // Get the y-coordinate of the tap
+    
+    // Get the x and y coordinates of the tap
+    final double x = details.localPosition.dx;
+    final double y = details.localPosition.dy;
     print("Screen tapped at: x=$x, y=$y");
+    
     try {
-      String updatedBubbles = js.context.callMethod('onTap', [x, y]); // Call the WASM function to process the tap
+      // Call the WASM function to process the tap
+      print("Calling onTap in WASM");
+      String updatedBubbles = js.context.callMethod('onTap', [x, y]);
       print("Updated bubbles: $updatedBubbles");
+      
+      // Update the harvest coin balance
       setState(() {
-        harvestCoins = js.context.callMethod('getHarvestCoins'); // Update the harvest coin balance
+        print("Updating harvest coins");
+        harvestCoins = js.context.callMethod('getHarvestCoins');
         print("Harvest coins updated: $harvestCoins");
       });
     } catch (e) {
@@ -51,24 +63,44 @@ class _PumpkinSmashScreenState extends State<PumpkinSmashScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: Text('HRVST: $harvestCoins', style: TextStyle(fontSize: 18)), // Display the current HRVST coin balance
+              // Display the current HRVST coin balance
+              child: Text('HRVST: $harvestCoins', style: TextStyle(fontSize: 18)),
             ),
           ),
         ],
       ),
       body: GestureDetector(
         onTapDown: _onTap, // Detect tap events to pop bubbles
-        child: Container(
-          color: Colors.white,
-          child: Center(
-            child: Text(
-              'Tap to Smash Pumpkins!',
-              style: TextStyle(fontSize: 24),
+        child: Stack(
+          children: [
+            // Background SVG graphic
+            SvgPicture.asset(
+              'assets/background.svg',
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              fit: BoxFit.cover,
             ),
-          ),
+            // Center text for tapping instructions
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Tap to Smash Pumpkins!',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  // Pumpkin SVG as game element or skin
+                  SvgPicture.asset(
+                    'assets/pumpkin.svg',
+                    width: 100,
+                    height: 100,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-```
